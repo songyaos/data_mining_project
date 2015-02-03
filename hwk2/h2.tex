@@ -1,0 +1,310 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[paper=a4, fontsize=15pt]{article} % A4 paper and 11pt font size
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{graphicx}
+\usepackage[top=0.5in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{tabularx}
+
+
+\pagestyle{plain} % Makes all pages in the document conform to the custom headers and footers
+
+\title{	
+Data Mining \\
+Homework 2
+}
+\author{Yao Song\\301266041} % Your name
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\maketitle % Print the title
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{MapReduce}
+\subsection*{2.3.4}
+mapper: The mapper will read in the bag and the query constraint. The mapper outputs each item which passes the constraint. 
+The output key-value pair format is [(first name, last name),1], where key is a tuple containing first name and last name.
+
+reducer: The reducer takes all the output from the mapper.
+The reducer then combines and counts all the items with the same last name. Then the reducer will output the key-value pair [(first name, last name), count] for each distinct last name.
+
+a sample input like the following:\\
+Tom Lee\\
+John Smith\\
+Tom Lee\\
+James Bond\\
+Tom White\\
+Tom White\\
+Tom Blake\\
+with query "first name  = Tom" will output something like this:\\
+(Tom , Blake )	1\\
+(Tom , White )	2\\
+(Tom , Lee )	2
+
+Python code to implement this process appended at last.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Link Analysis}
+\subsection*{5.4.2}
+\subsubsection*{Trust Rank}
+Assume $\beta = 0.8$. 
+Since only node B is reliable, the teleport set is $S = \{B\}$ and we have $\boldsymbol{e}_s = [0,1,0,0]$. 
+Then the vector $(1-\beta)\boldsymbol{e}_s/|S|$ has 0.2 for only second component and zero for other parts.
+The iteration equation can be written as:\\
+\begin{align}
+v' 
+&= \beta M v + (1-\beta)\boldsymbol{e}_s/|S|  \\
+&= 
+\begin{bmatrix}
+       0 			 & \frac{2}{5} & \frac{4}{5}  	& 0          \\[0.3em]
+       \frac{4}{15}  & 0           & 0 				& \frac{2}{5}					\\[0.3em]
+       \frac{4}{15}  & 0		   & 0 				& \frac{2}{5}					\\[0.3em]
+       \frac{4}{15}  & \frac{2}{5} & 0				& 0
+\end{bmatrix}v 
++ 
+\begin{bmatrix}
+       0 			 \\[0.3em]
+       \frac{1}{5}  \\[0.3em]
+	   0  \\[0.3em]
+       0
+\end{bmatrix}
+\end{align}
+
+After calculation, 
+the trust rank is $t =[\frac{198}{735},\frac{263}{735},\frac{116}{735},\frac{158}{735}  ]$
+\subsubsection*{Spam Mass}
+The page rank as given in the book is $r = [\frac{3}{9},\frac{2}{9},\frac{2}{9},\frac{2}{9}]$.\\
+\\
+So the spam mass is given by the formula $\frac{r-t}{r}$ is 
+$[\frac{94}{490},\frac{-299}{490},\frac{142}{490},\frac{16}{490}]$.
+A list of these vectors is given below:\\
+\\
+\begin{tabular}{l*{6}{c}r}
+Node             & Page Rank & Trust Rank & Spam Mass  \\
+\hline\\
+A		            & $\frac{3}{9}$ & $\frac{198}{735}$ & $\frac{94}{490}$   \\[1em]
+B		           	& $\frac{2}{9}$ & $\frac{263}{735}$ & $\frac{-299}{490}$  \\[1em]
+C				    & $\frac{2}{9}$ & $\frac{116}{735}$ & $\frac{142}{490}$ \\[1em]
+D				    & $\frac{2}{9}$ & $\frac{158}{735}$ & $\frac{16}{490}$ \\
+
+\end{tabular}
+
+
+\subsection*{5.5.1}
+The link matrix of Fig. 5.1 in the book is given below:\\
+\begin{align}
+L = 
+\begin{bmatrix}
+       0 & 1 & 1  & 1   \\[0.3em]
+       1  & 0 & 0 & 1	\\[0.3em]
+	   1  & 0 & 0 & 0	\\[0.3em]
+       0 & 1 & 1  & 0
+\end{bmatrix}
+\end{align}
+After calculation, the limits of a and h are: 
+\begin{align}
+a = 
+\begin{bmatrix}
+       0.289    \\[0.3em]
+       1.000 	\\[0.3em]
+	   1.000 	\\[0.3em]
+       0.813
+\end{bmatrix},
+h=
+\begin{bmatrix}
+       1.000    \\[0.3em]
+       0.392 	\\[0.3em]
+	   0.103 	\\[0.3em]
+       0.711
+\end{bmatrix}.
+\end{align}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Recommender System}
+\subsection*{9.2.1}
+\subsubsection*{a}
+The cosine of the angel between $a$ and $b$ is :\\
+\begin{align}
+\frac{8.2008 + 160000\alpha^2 + 24\beta^2}
+{\sqrt{9.3636 + 250000\alpha^2 + 36\beta^2} \sqrt{7.1824 + 102400\alpha^2 + 16\beta^2}}
+\end{align}
+
+The cosine of the angel between $a$ and $c$ is :\\
+\begin{align}
+\frac{8.9352 + 320000\alpha^2 + 36\beta^2}
+{\sqrt{9.3636 + 250000\alpha^2 + 36\beta^2} \sqrt{8.5264 + 409600\alpha^2 + 36\beta^2}}
+\end{align}
+
+The cosine of the angel between $b$ and $c$ is :\\
+\begin{align}
+\frac{7.8256 + 204800\alpha^2 + 24\beta^2}
+{\sqrt{7.1824 + 102400\alpha^2 + 16\beta^2} \sqrt{8.5264 + 409600\alpha^2 + 36\beta^2}}
+\end{align}
+\subsubsection*{b}
+if $\alpha=1$ and  $\beta=1$, the data is listed below:\\
+\begin{tabular}{|c|c|c|c|}
+\hline 
+x,y & a,b & a,c & b,c \\ 
+\hline 
+cos($\theta$) & 0.999997333284 & 0.999995343121 & 0.999987853375 \\ 
+\hline 
+$\theta(degrees)$  & 0.140345459308   &   0.181185239071    & 0.292152614283 \\
+\hline
+\end{tabular} 
+
+\subsubsection*{c}
+if $\alpha=0.01$ and  $\beta=0.5$, the data is listed below:\\
+\begin{tabular}{|c|c|c|c|}
+\hline 
+x,y & a,b & a,c & b,c \\ 
+\hline 
+cos($\theta$) & 0.990881500541 & 0.991554714333 & 0.969177921994\\ 
+\hline 
+$\theta(degrees)$  & 7.74400574467  & 7.45370628496  & 15.8939985811\\
+\hline
+\end{tabular} 
+
+\subsubsection*{d}
+In this case, $\alpha=3.0/1460$ and  $\beta=3/16$, the data is listed below:\\
+\begin{tabular}{|c|c|c|c|}
+\hline 
+x,y & a,b & a,c & b,c \\ 
+\hline 
+cos($\theta$) & 0.994390403954 &  0.995613999454 &  0.982246918405 \\ 
+\hline 
+$\theta(degrees)$ & 6.0718677355  &  5.37067531447 &  10.814438368\\
+\hline
+\end{tabular} 
+
+
+
+\subsection*{9.2.3}
+\subsubsection*{a}
+The average rating of the user is $(4+2+5)/3 =3.67 $. 
+So the normalized rating of the user is\\ $A:0.33,B:-1.67,C:1.33$
+\subsubsection*{b}
+The user profile is computed as follows:\\
+for the processor speed: (3.06*4+2.68*2+2.92*5)/(4+2+5) = 2.92\\
+for the disk size: (500*4+320*2+640*5)/(4+2+5) = 530\\
+for the main memory size: (6*4+4*2+6*5)/(4+2+5) = 5\\
+So the user profile is (2.92, 530, 5)
+
+
+
+\subsection*{Q1}
+The cosine similarity between Alice and other users are listed blow:\\
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+• & u1 & u2 & u3 & u4 \\ 
+\hline 
+similarity & 0.76 & 0.99 & 0.91 & 0.31 \\ 
+\hline 
+\end{tabular}
+%0.762456367879 0.992914564541 0.912280701754 0.314373041714
+\\With the threshold 0.75, we know the neighbor are user1 and user2. We do not need to consider user3 because it does not rate item 5.
+
+Thus the estimated rating of Alice on item 5 would be\\
+$(5+4+4)/3.0 + (0.76*(3 - 11/4.0) + 0.99*(5 - 16/4.0))/(0.76+0.99) \approx 5$ \\
+So Alice's predicated rating on item 5 is 5.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section*{Finding Similar Items}
+\subsection*{3.3.3}
+\subsubsection*{a}
+The minhash signature is listed in the following table.\\
+\begin{tabular}{|>{$}l<{$}|>{$}l<{$}|>{$}l<{$}|>{$}l<{$}|>{$}l<{$}|}
+\hline 
+ & s_1 & s_2 & s_3 & s_4 \\ 
+\hline 
+h_1 & 5 & 1 & 1 & 1 \\ 
+\hline 
+h_2 & 2 & 2 & 2 & 2 \\ 
+\hline 
+h_3 & 0 & 1 & 4 & 0 \\ 
+\hline 
+\end{tabular} 
+\subsubsection*{b}
+$h_3$ is a true permutation as shown in the following table.\\
+%\begin{tabular}{|>{$}l<{$}|>{$}l<{$}|>{$}l<{$}|>{$}l<{$}|}
+%\hline 
+%element & h_1 & h_2 & h_3 \\ 
+%\hline 
+%0 & 1 & 2 & 2 \\ 
+%\hline 
+%1 & 3 & 5 & 1 \\ 
+%\hline 
+%2 & 5 & 2 & 0 \\ 
+%\hline 
+%3 & 1 & 5 & 5 \\ 
+%\hline 
+%4 & 3 & 2 & 4 \\ 
+%\hline 
+%5 & 5 & 5 & 3 \\ 
+%\hline 
+%\end{tabular} 
+\begin{tabular}{l*{6}{c}r}
+Element             & $h_1$ & $h_2$ & $h_3$  \\
+\hline
+0				  	& 1 & 2 & 2   \\
+1		            & 3 & 5 & 1   \\
+2		           	& 5 & 2 & 0  \\
+3				    & 1 & 5 & 5 \\
+4				    & 3 & 2 & 4 \\
+5				    & 5 & 5 & 3 \\
+\end{tabular}
+\subsubsection*{c}
+The comparison of estimated similarities and Jaccard Similarities are listed below.\\
+\begin{tabular}{|>{$}l<{$}||c|c|}
+\hline 
+• & esimated sim & Jaccard sim \\ 
+\hline 
+s_1,s_2 & 1/3 & 2/6 \\ 
+\hline 
+s_1,s_3 & 1/3 & 2/6 \\ 
+\hline 
+s_1,s_4 & 2/3 & 3/6 \\ 
+\hline 
+s_2,s_3 & 2/3 & 2/6 \\ 
+\hline 
+s_2,s_4 & 2/3 & 3/6 \\ 
+\hline 
+s_3,s_4 & 2/3 & 3/6 \\ 
+\hline 
+\end{tabular} 
+
+\subsection*{3.4.2}
+The exact and estimated value of $s$ for each case are listed in the table below:\\
+\begin{tabular}{|c|c|c|}
+\hline 
+• & exact & estimated \\ 
+\hline 
+(3,10) & 0.41 & 0.46 \\ 
+\hline 
+(6,20) & 0.57 & 0.61 \\ 
+\hline 
+(5,50) & 0.42 & 0.46 \\ 
+\hline 
+\end{tabular} 
+\\We can observe that the exact value of $s$ is always smaller than the corresponding estimated one.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
